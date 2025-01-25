@@ -7,13 +7,13 @@ import retrofit2.http.Path
 
 interface ExchangeApiInterface {
 
-    @GET("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies.json")
+    @GET("/npm/@fawazahmed0/currency-api@latest/v1/currencies.json")
     fun getCurrencies(): Single<Map<String, String>>
 
-    @GET("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/{base}.json")
+    @GET("/npm/@fawazahmed0/currency-api@latest/v1/currencies/{base}.json")
     fun getExchangeRates(@Path("base") baseCurrency: String): Single<JsonElement>
 
-    @GET("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@{date}/v1/currencies/{base}.json")
+    @GET("/npm/@fawazahmed0/currency-api@{date}/v1/currencies/{base}.json")
     fun getHistoricRates(
         @Path("date") date: String,
         @Path("base") baseCurrency: String

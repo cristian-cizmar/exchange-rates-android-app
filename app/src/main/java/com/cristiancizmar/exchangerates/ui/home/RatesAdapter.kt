@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.cristiancizmar.exchangerates.databinding.HomeRateItemBinding
 import com.cristiancizmar.exchangerates.model.Rate
+import java.util.Locale
 
 class RatesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -31,7 +32,7 @@ class RatesAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun bind(rate: Rate) {
             binding.nameTv.text = rate.name
-            binding.rateTv.text = rate.rate.toString().take(9)
+            binding.rateTv.text = String.format(Locale.getDefault(), "%.5f", rate.rate).take(9)
         }
     }
 }

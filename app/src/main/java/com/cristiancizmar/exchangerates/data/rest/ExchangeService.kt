@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * API: https://github.com/fawazahmed0/exchange-api
  */
 
-private const val BASE_URL = "https://cdn.jsdelivr.net/npm/@fawazahmed0/"
+private const val BASE_URL = "https://cdn.jsdelivr.net/"
 
 class ExchangeService : ExchangeApiInterface {
 

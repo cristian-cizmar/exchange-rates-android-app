@@ -35,9 +35,12 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.chartTitleEur.text = "${viewModel.getBaseCurrency()} / EUR"
-        binding.chartTitleUsd.text = "${viewModel.getBaseCurrency()} / USD"
-        binding.chartTitleGbp.text = "${viewModel.getBaseCurrency()} / GBP"
+        binding.chartTitleEur.text =
+            String.format(getString(R.string.concat_slash), viewModel.getBaseCurrency(), EUR)
+        binding.chartTitleUsd.text =
+            String.format(getString(R.string.concat_slash), viewModel.getBaseCurrency(), USD)
+        binding.chartTitleGbp.text =
+            String.format(getString(R.string.concat_slash), viewModel.getBaseCurrency(), GBP)
 
         initChart(binding.chartEur)
         initChart(binding.chartUsd)
