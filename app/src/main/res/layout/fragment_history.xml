@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    tools:context=".ui.history.HistoryFragment">
+
+    <TextView
+        android:id="@+id/chartTitleEur"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/chartEur"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="EUR / EUR" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartEur"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toTopOf="@id/chartUsd"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/chartTitleUsd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/chartUsd"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="EUR / USD" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartUsd"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginTop="30dp"
+        app:layout_constraintBottom_toTopOf="@id/chartGbp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chartEur" />
+
+    <TextView
+        android:id="@+id/chartTitleGbp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/chartGbp"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="EUR / GBP" />
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/chartGbp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginTop="30dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chartUsd" />
+</androidx.constraintlayout.widget.ConstraintLayout>
