@@ -3,6 +3,7 @@ buildscript {
     ext {
         daggerVersion = '2.48'
         lifecycleVersion = '2.4.1'
+        powermockVersion = '2.0.2'
     }
 }
 plugins {
