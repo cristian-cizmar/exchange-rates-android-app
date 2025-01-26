@@ -1,6 +1,7 @@
 <resources>
     <string name="home">Home</string>
-    <string name="app_name">Exchange Rates</string>
+    <string name="app_name">Ex Rates</string>
+    <string name="exchange_rates_two_lines">Exchange\nRates</string>
     <string name="concat_string_api_device">API data from %1$s\nRefreshed at: %2$s\nBase currency: %3$s</string>
     <string name="concat_slash">%1$s / %2$s</string>
     <string name="history">History</string>

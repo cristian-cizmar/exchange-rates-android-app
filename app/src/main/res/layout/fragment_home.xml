@@ -10,15 +10,30 @@
     tools:context=".ui.home.HomeFragment">
 
     <TextView
+        android:id="@+id/exchangeTv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:text="@string/exchange_rates_two_lines"
+        android:textColor="@color/blue"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/ratesRv"
+        app:layout_constraintEnd_toStartOf="@id/timestampTv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/timestampTv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="4dp"
         android:gravity="end"
-        android:padding="5dp"
         android:textColor="@android:color/black"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/exchangeTv"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/concat_string_api_device" />
 
@@ -26,6 +41,7 @@
         android:id="@+id/ratesRv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="4dp"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
