@@ -9,6 +9,7 @@ import com.cristiancizmar.exchangerates.data.ExchangeRepository
 import com.cristiancizmar.exchangerates.data.PreferencesRepository
 import com.cristiancizmar.exchangerates.util.EUR
 import com.cristiancizmar.exchangerates.util.GBP
+import com.cristiancizmar.exchangerates.util.State
 import com.cristiancizmar.exchangerates.util.USD
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,11 +26,10 @@ class HistoryViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    private val historicDays =
-        MutableList(DAYS_IN_HISTORY) { mapOf(EUR to 0f, USD to 0f, GBP to 0f) }
-
-    private val _historicDaysLiveData = MutableLiveData(historicDays)
-    val historicDaysLiveData: LiveData<MutableList<Map<String, Float>>> = _historicDaysLiveData
+    private val _historicDaysLiveData: MutableLiveData<State<MutableList<Map<String, Float>>>> =
+        MutableLiveData(initData())
+    val historicDaysLiveData: LiveData<State<MutableList<Map<String, Float>>>> =
+        _historicDaysLiveData
 
     private val disposable = CompositeDisposable()
 
@@ -59,10 +59,19 @@ class HistoryViewModel @Inject constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ result ->
-                    _historicDaysLiveData.value = _historicDaysLiveData.value.apply {
-                        result.rates.let { this?.set(idx, it) }
+                    if (_historicDaysLiveData.value !is State.Success) {
+                        _historicDaysLiveData.value = initData()
                     }
-                }, {})
+                    _historicDaysLiveData.value =
+                        (_historicDaysLiveData.value as? State.Success).apply {
+                            this?.data?.set(idx, result.rates)
+                        }
+                }, {
+                    _historicDaysLiveData.value = State.Error(it)
+                })
         )
     }
+
+    private fun initData() =
+        State.Success(MutableList(DAYS_IN_HISTORY) { mapOf(EUR to 0f, USD to 0f, GBP to 0f) })
 }

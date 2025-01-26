@@ -10,7 +10,10 @@ import androidx.fragment.app.viewModels
 import com.cristiancizmar.exchangerates.R
 import com.cristiancizmar.exchangerates.databinding.FragmentHomeBinding
 import com.cristiancizmar.exchangerates.model.Rate
+import com.cristiancizmar.exchangerates.ui.MainActivity
 import com.cristiancizmar.exchangerates.util.HOUR_FORMAT
+import com.cristiancizmar.exchangerates.util.State
+import com.cristiancizmar.exchangerates.util.displayGeneralErrorToast
 import com.cristiancizmar.exchangerates.util.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
@@ -52,14 +55,26 @@ class HomeFragment : Fragment() {
     }
 
     private fun initObservers() {
-        viewModel.loading.observe(viewLifecycleOwner) { loading ->
-            binding.loadingPb.visibility = if (loading) View.VISIBLE else View.GONE
-        }
         viewModel.rates.observe(viewLifecycleOwner) { result ->
-            result?.let { exchangeRate ->
-                updateRates(exchangeRate.rates)
-                updateText(exchangeRate.date)
+            when (result) {
+                State.Loading -> {
+                    (activity as? MainActivity)?.setProgressBarLoading(true)
+                }
+
+                is State.Success -> {
+                    (activity as? MainActivity)?.setProgressBarLoading(false)
+                    result.data?.let { exchangeRate ->
+                        updateRates(exchangeRate.rates)
+                        updateText(exchangeRate.date)
+                    }
+                }
+
+                is State.Error -> {
+                    (activity as? MainActivity)?.setProgressBarLoading(false)
+                    displayGeneralErrorToast(requireContext())
+                }
             }
+
         }
     }
 

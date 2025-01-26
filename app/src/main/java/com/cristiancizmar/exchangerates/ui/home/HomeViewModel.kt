@@ -7,6 +7,7 @@ import com.cristiancizmar.exchangerates.data.ExchangeRepository
 import com.cristiancizmar.exchangerates.data.PreferencesRepository
 import com.cristiancizmar.exchangerates.model.ExchangeRate
 import com.cristiancizmar.exchangerates.util.DEFAULT_REFRESH_RATE
+import com.cristiancizmar.exchangerates.util.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,11 +22,8 @@ class HomeViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    private val _rates = MutableLiveData<ExchangeRate?>()
-    val rates: LiveData<ExchangeRate?> = _rates
-
-    private val _loading = MutableLiveData(false)
-    val loading: LiveData<Boolean> = _loading
+    private val _rates = MutableLiveData<State<ExchangeRate?>>()
+    val rates: LiveData<State<ExchangeRate?>> = _rates
 
     private var refreshRate = DEFAULT_REFRESH_RATE
 
@@ -47,22 +45,18 @@ class HomeViewModel @Inject constructor(
 
     fun cancelOperations() {
         disposable.clear()
-        _loading.value = false
     }
 
     private fun getRates() {
-        if (_loading.value == true) return
-        _loading.value = true
         disposable.add(
             exchangeRepository.getExchangeRates(getMainCurrency())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { _rates.value = State.Loading }
                 .subscribe({
-                    _loading.value = false
-                    _rates.value = it
+                    _rates.value = State.Success(it)
                 }, {
-                    _loading.value = false
-                    _rates.value = null
+                    _rates.value = State.Error(it)
                 })
         )
     }

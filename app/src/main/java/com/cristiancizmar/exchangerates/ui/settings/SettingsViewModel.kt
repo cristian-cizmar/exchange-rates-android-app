@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.cristiancizmar.exchangerates.data.ExchangeRepository
 import com.cristiancizmar.exchangerates.data.PreferencesRepository
+import com.cristiancizmar.exchangerates.util.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -17,8 +18,8 @@ class SettingsViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    private val _currencies = MutableLiveData<List<Pair<String, String>>?>()
-    val currencies: LiveData<List<Pair<String, String>>?> = _currencies
+    private val _currencies = MutableLiveData<State<List<Pair<String, String>>?>>()
+    val currencies: LiveData<State<List<Pair<String, String>>?>> = _currencies
 
     private val _refreshRate = MutableLiveData<Int>()
     val refreshRate: MutableLiveData<Int> = _refreshRate
@@ -49,10 +50,11 @@ class SettingsViewModel @Inject constructor(
             exchangeRepository.getCurrencies()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe { _currencies.value = State.Loading }
                 .subscribe({ response ->
-                    _currencies.value = response.map { Pair(it.key, it.value) }
+                    _currencies.value = State.Success(response.map { Pair(it.key, it.value) })
                 }, {
-                    _currencies.value = null
+                    _currencies.value = State.Error(it)
                 })
         )
     }

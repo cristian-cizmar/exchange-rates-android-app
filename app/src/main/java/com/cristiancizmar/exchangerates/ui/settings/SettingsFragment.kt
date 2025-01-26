@@ -12,9 +12,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.cristiancizmar.exchangerates.R
 import com.cristiancizmar.exchangerates.databinding.FragmentSettingsBinding
+import com.cristiancizmar.exchangerates.ui.MainActivity
 import com.cristiancizmar.exchangerates.util.REFRESH_15
 import com.cristiancizmar.exchangerates.util.REFRESH_3
 import com.cristiancizmar.exchangerates.util.REFRESH_5
+import com.cristiancizmar.exchangerates.util.State
+import com.cristiancizmar.exchangerates.util.displayGeneralErrorToast
 import com.cristiancizmar.exchangerates.util.indexOfFirstDefault0
 import com.cristiancizmar.exchangerates.util.viewBinding
 import com.google.android.material.navigation.NavigationBarView.OnItemSelectedListener
@@ -55,11 +58,15 @@ class SettingsFragment : Fragment() {
             binding.currencySpinner.setSelection(refreshRateOptions.indexOfFirstDefault0(refreshRate.toString()))
         }
         viewModel.mainCurrency.observe(viewLifecycleOwner) { mainCurrency ->
-            binding.currencySpinner.setSelection(
-                viewModel.currencies.value
-                    ?.map { it.first }
-                    ?.indexOfFirstDefault0(mainCurrency) ?: 0
-            )
+            viewModel.currencies.value.let { allCurrencies ->
+                if (allCurrencies is State.Success) {
+                    binding.currencySpinner.setSelection(
+                        allCurrencies.data
+                            ?.map { it.first }
+                            ?.indexOfFirstDefault0(mainCurrency) ?: 0
+                    )
+                }
+            }
         }
     }
 
@@ -77,16 +84,31 @@ class SettingsFragment : Fragment() {
     }
 
     private fun initCurrencySpinner() {
-        viewModel.currencies.observe(viewLifecycleOwner) { list ->
-            if (list == null) return@observe
-            val initialItem = viewModel.currencies.value?.map { it.first }
-                ?.indexOfFirstDefault0(viewModel.mainCurrency.value) ?: 0
-            setupSpinner(
-                spinner = binding.currencySpinner,
-                items = list.map { "${it.first}: ${it.second}" },
-                onClick = { currency -> viewModel.setSavedCurrency(currency) },
-                initialItem = initialItem
-            )
+        viewModel.currencies.observe(viewLifecycleOwner) { result ->
+            when (result) {
+
+                State.Loading -> {
+                    (activity as? MainActivity)?.setProgressBarLoading(true)
+                }
+
+                is State.Success -> {
+                    (activity as? MainActivity)?.setProgressBarLoading(false)
+
+                    val initialItem = result.data?.map { it.first }
+                        ?.indexOfFirstDefault0(viewModel.mainCurrency.value) ?: 0
+                    setupSpinner(
+                        spinner = binding.currencySpinner,
+                        items = result.data?.map { "${it.first}: ${it.second}" } ?: emptyList(),
+                        onClick = { currency -> viewModel.setSavedCurrency(currency) },
+                        initialItem = initialItem
+                    )
+                }
+
+                is State.Error -> {
+                    (activity as? MainActivity)?.setProgressBarLoading(false)
+                    displayGeneralErrorToast(requireContext())
+                }
+            }
         }
     }
 
