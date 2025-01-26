@@ -86,6 +86,8 @@ class HistoryFragment : Fragment() {
 
     private fun setDataToChart(chart: LineChart, dataArray: ArrayList<Entry>) {
         val lineDataSet = LineDataSet(dataArray, "")
+        lineDataSet.setCircleColor(R.color.blue)
+        lineDataSet.setColors(R.color.blue)
         val data = LineData(lineDataSet)
         data.setDrawValues(false)
         chart.data = data
