@@ -14,7 +14,8 @@ import com.cristiancizmar.exchangerates.R
 import com.cristiancizmar.exchangerates.databinding.FragmentSettingsBinding
 import com.cristiancizmar.exchangerates.ui.MainActivity
 import com.cristiancizmar.exchangerates.util.REFRESH_15
-import com.cristiancizmar.exchangerates.util.REFRESH_3
+import com.cristiancizmar.exchangerates.util.REFRESH_30
+import com.cristiancizmar.exchangerates.util.REFRESH_60
 import com.cristiancizmar.exchangerates.util.REFRESH_5
 import com.cristiancizmar.exchangerates.util.State
 import com.cristiancizmar.exchangerates.util.displayGeneralErrorToast
@@ -28,7 +29,8 @@ class SettingsFragment : Fragment() {
 
     private val binding by viewBinding(FragmentSettingsBinding::bind)
     private val viewModel: SettingsViewModel by viewModels()
-    private val refreshRateOptions = listOf(REFRESH_3, REFRESH_5, REFRESH_15).map { it.toString() }
+    private val refreshRateOptions =
+        listOf(REFRESH_5, REFRESH_15, REFRESH_30, REFRESH_60).map { it.toString() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

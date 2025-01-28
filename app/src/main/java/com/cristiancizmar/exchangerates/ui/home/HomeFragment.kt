@@ -80,10 +80,7 @@ class HomeFragment : Fragment() {
 
     private fun updateRates(rates: Map<String, Float>) {
         val newData = rates.toList().map {
-            Rate(
-                "${viewModel.getMainCurrency()} / ${it.first}",
-                it.second
-            )
+            Rate(it.first, it.second)
         }
         ratesAdapter.submitList(newData)
     }
@@ -95,8 +92,8 @@ class HomeFragment : Fragment() {
             String.format(
                 getString(R.string.concat_string_api_device),
                 date,
-                deviceDate,
-                viewModel.getMainCurrency()
+                deviceDate
             )
+        binding.mainCurrencyTv.text = "1 ${viewModel.getMainCurrency()} ="
     }
 }
